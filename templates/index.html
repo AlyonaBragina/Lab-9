@@ -1,35 +1,81 @@
 <html>
 <head>
-    <title>Best store!</title>
-    <script type="text/javascript" src="/static/update.js"></script>
-    <link href="static/store.css" rel="stylesheet">
-</head>
+  <title>Список мест работы</title>
+  <style>
+    body {
+      background-color: #e6e6e6;
+      font-family: Arial;
+      text-align: center;
+    }
 
+    h1 {
+      color: #000000;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    td, th {
+      border: 1px solid #000000;
+      padding: 5px;
+    }
+
+    th {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    form {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 200px;
+    }
+
+    button {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 5px 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
 <body>
-    <h1>Furniture store:</h1>
-    <h3>Add new product:</h3>
-    <form>
-        <div>
-            <input type="text" name="prod_name" id="prod_name">
-            <label for="prod_name">Product name</label>
-        </div>
-        <div>
-            <input type="number" name="price" id="price">
-            <label for="price">Price (rub.)</label>
-        </div>
-        <button onClick="addProduct()">Add</button>
-    </form>
-    <ul>
-        {% for product in products_list %}
-        <li>
-            <div>
-                <div>{{ product['prod_name'] }}</div>
-                <div>{{ product['price'] }} rub.</div>
-                <input value="{{product['id']}}" onChange="updateProd(this)" name="in_stock" type="checkbox" {% if product.in_stock %} checked {% endif %}>
-                <label for="in_stock">In stock</label>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+  <h1>Список мест работы</h1>
+  <table id="work-history-table">
+    <thead>
+      <tr>
+        <th>Наименование места работы</th>
+        <th>Срок работы (мес.)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for work_history in work_history_list %}
+      <tr>
+        <td>{{ work_history.company }}</td>
+        <td>{{ work_history.term }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+  <form action="/">
+    <label for="company">Наименование места работы:</label>
+    <input type="text" name="company">
+    <label for="term">Срок работы в месяцах:</label>
+    <input type="number" name="term">
+    <button type="submit">Добавить</button>
+  </form>
 </body>
 </html>

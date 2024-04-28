@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 
 
 app = Flask('Furniture store')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
+app.config['SQLALCHEMY_DATABAE_URI'] = 'sqlite:///project.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
