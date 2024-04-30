@@ -1,25 +1,33 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////project.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
 db = SQLAlchemy(app)
 
-class WorkHistory(db.Model):
+class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    company = db.Column(db.String(80), nullable=False)
-    term = db.Column(db.Integer, nullable=False)
+    company_name = db.Column(db.String(80), unique=True)
+    term = db.Column(db.Integer)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        company = request.form['company']
+        company_name = request.form['company']
         term = request.form['term']
-        work_history = WorkHistory(company=company, term=term)
-        db.session.add(work_history)
+        new_company = Company(company_name=company_name, term=term)
+        db.session.add(new_company)
         db.session.commit()
-    work_history_list = WorkHistory.query.all()
-    return render_template('index.html', work_history_list=work_history_list)
+    companies = Company.query.all()
+    return render_template('index.html', companies=companies)
+
+@app.route('/clear', methods=['POST'])
+def clear():
+    db.session.query(Company).delete()
+    db.session.commit()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():
+        db.create_all()
+    app.run()
